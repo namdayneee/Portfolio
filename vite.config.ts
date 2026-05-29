@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  base: "/namdayneee/",
+  // Project Pages: https://<user>.github.io/<repo>/
+  base: "/Portfolio/",
   plugins: [react(), tailwindcss()],
 });
