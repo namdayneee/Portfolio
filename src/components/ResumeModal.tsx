@@ -1,252 +1,56 @@
-import { motion, AnimatePresence } from "motion/react";
-import { X, Mail, MapPin, Briefcase, Award, GraduationCap, Download, CheckCircle } from "lucide-react";
-import { useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { Download, Github, Mail, MapPin, X } from "lucide-react";
+import type { ReactNode } from "react";
+import { EXPERIENCE_ITEMS, PROFILE, PROJECTS, SKILL_CATEGORIES } from "../data";
 
-interface ResumeModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-export default function ResumeModal({ isOpen, onClose }: ResumeModalProps) {
-  const [downloading, setDownloading] = useState(false);
-  const [downloaded, setDownloaded] = useState(false);
-
-  const triggerDownload = () => {
-    setDownloading(true);
-    setTimeout(() => {
-      setDownloading(false);
-      setDownloaded(true);
-      
-      // Simulate real file download
-      const content = `NAM NGUYEN DINH - Resume / CV\n\nEmail: dinhnam.tech@gmail.com\nLocation: Ho Chi Minh City, Vietnam\nLinkedIn: linkedin.com/in/nam-nguyen-dinh\nWebsite: Portfolio Website\n\nEDUCATION:\n- Ho Chi Minh University of Technology (HCMUT)\n  B.S. in Computer Science (2020 - 2024)\n  GPA: 3.6/4.0 | Specialization in Software Engineering & Distributed Systems\n\nEXPERIENCE:\n- Full-Stack Intern @ EyeCode Technology Solutions (June 2023 - Present)\n  * Optimized rendering speeds by 40%\n  * Authored automated test suite coverage up to 85%\n  * Constructed secure API integrations\n\nTECHNICAL STACK:\n- Languages: JavaScript, TypeScript, Go, HTML/CSS\n- Frontend: React.js, React Native, Tailwind CSS, Redux\n- Backend: Node.js, Express, Go, REST APIs\n- Databases: PostgreSQL, Prisma, MongoDB, Redis\n- DevOps & AI: Docker, Cursor, Clerk Auth, Gemini AI Integration\n\nCERTIFICATIONS & ACHIEVEMENTS:\n- Certified Scrum Professional (CSP)\n- Gemini Certified Student Developer\n- Outstanding Student Scholar Award, HCMUT`;
-      const blob = new Blob([content], { type: "text/plain" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "Nam_Nguyen_Dinh_CV_FullStack.txt";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-      
-      setTimeout(() => setDownloaded(false), 3000);
-    }, 1500);
-  };
-
+export default function ResumeModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="absolute inset-0 bg-neutral-950/85 backdrop-blur-md"
-          />
+        <div className="fixed inset-0 z-[80] flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="resume-title">
+          <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-black/80 backdrop-blur-md print-hidden" aria-label="Close resume" />
+          <motion.article id="resume-sheet" initial={{ opacity: 0, y: 18, scale: .98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 18, scale: .98 }} className="resume-scrollbar relative flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl border border-white/15 bg-[#111114] shadow-2xl">
+            <header className="print-hidden flex items-center justify-between border-b border-white/[.07] px-5 py-4 sm:px-7">
+              <div><p className="font-mono text-[10px] uppercase tracking-[.18em] text-cyan-300">Resume preview</p><p className="mt-1 text-sm text-zinc-400">Use your browser's print dialog to save as PDF.</p></div>
+              <div className="flex gap-2"><button onClick={() => window.print()} className="flex items-center gap-2 rounded-lg bg-cyan-200 px-4 py-2.5 font-mono text-xs font-bold text-cyan-950 hover:bg-cyan-300"><Download className="h-4 w-4" /> Save as PDF</button><button onClick={onClose} className="rounded-lg border border-white/10 p-2.5 text-zinc-400 hover:text-white" aria-label="Close"><X className="h-5 w-5" /></button></div>
+            </header>
 
-          {/* Modal Container */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ type: "spring", duration: 0.4 }}
-            className="relative w-full max-w-4xl max-h-[90vh] overflow-hidden bg-[#131315] border border-outline-variant/30 rounded-2xl flex flex-col shadow-2xl"
-          >
-            {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b border-outline-variant/10 bg-surface-container-lowest/55">
-              <div>
-                <h2 className="font-headline-lg text-xl md:text-2xl text-white flex items-center gap-2">
-                  <GraduationCap className="text-[#00dce6] w-6 h-6" /> Resume / CV
-                </h2>
-                <p className="text-xs text-[#b9cacb] font-mono mt-1">NAM_NGUYEN_DINH_CV_2024.pdf</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={triggerDownload}
-                  disabled={downloading}
-                  className="font-mono text-xs px-4 py-2 border border-primary-fixed-dim/40 hover:border-primary-fixed-dim bg-primary-fixed-dim/10 hover:bg-primary-fixed-dim/20 text-[#00dce6] transition-all flex items-center gap-2 rounded-lg disabled:opacity-40"
-                >
-                  {downloading ? (
-                    <>
-                      <div className="w-3 h-3 border-2 border-primary-fixed-dim border-t-transparent rounded-full animate-spin" />
-                      Downloading...
-                    </>
-                  ) : downloaded ? (
-                    <>
-                      <CheckCircle className="w-4.5 h-4.5" />
-                      Saved!
-                    </>
-                  ) : (
-                    <>
-                      <Download className="w-4.5 h-4.5" />
-                      Download CV
-                    </>
-                  )}
-                </button>
-                <button
-                  onClick={onClose}
-                  className="p-2 border border-outline-variant/20 hover:bg-neutral-800 rounded-lg text-on-surface-variant hover:text-white transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-
-            {/* Resume Content (Scrollable) */}
-            <div className="flex-1 overflow-y-auto p-8 custom-scrollbar space-y-8 select-text">
-              {/* Top Title/Contact */}
-              <div className="flex flex-col md:flex-row md:justify-between items-start border-b border-outline-variant/10 pb-6 gap-4">
-                <div>
-                  <h1 className="text-3xl font-bold font-headline-lg text-white mb-2 tracking-tight">Nam Nguyen Dinh</h1>
-                  <p className="text-[#00dce6] font-mono text-sm tracking-widest font-semibold uppercase">Full-Stack Software Engineer</p>
-                  <p className="text-xs text-on-surface-variant max-w-lg mt-2">
-                    Meticulous developer specializing in robust frontends (React) and performant backend architectures (Node.js, Go). Focused on delivering intuitive web/mobile automation.
-                  </p>
-                </div>
-                
-                <div className="space-y-2 text-sm text-on-surface-variant font-mono">
-                  <div className="flex items-center gap-2 hover:text-[#00dce6] transition-colors">
-                    <Mail className="w-4.5 h-4.5 text-[#00dce6]/70" />
-                    <a href="mailto:dinhnam.tech@gmail.com">dinhnam.tech@gmail.com</a>
-                  </div>
-                  <div className="flex items-center gap-2 hover:text-[#00dce6] transition-colors">
-                    <Briefcase className="w-4.5 h-4.5 text-[#00dce6]/70" />
-                    <span>linkedin.com/in/namnd</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4.5 h-4.5 text-[#00dce6]/70" />
-                    <span>Ho Chi Minh City, Vietnam</span>
-                  </div>
-                </div>
+            <div className="overflow-y-auto p-6 sm:p-10">
+              <div className="print-border flex flex-col justify-between gap-5 border-b border-white/10 pb-7 sm:flex-row">
+                <div><h1 id="resume-title" className="print-dark text-3xl font-black text-white sm:text-4xl">{PROFILE.name}</h1><p className="print-accent mt-2 font-mono text-sm font-bold uppercase tracking-[.12em] text-cyan-300">Computer Science Student · Software Developer</p><p className="print-muted mt-3 max-w-xl text-sm leading-6 text-zinc-400">Final-year Computer Science student building practical full-stack, mobile, and developer-tool projects. Interested in junior software engineering roles with strong mentorship and real product responsibility.</p></div>
+                <div className="print-muted space-y-2 text-xs text-zinc-400"><a href={`mailto:${PROFILE.email}`} className="flex items-center gap-2"><Mail className="h-4 w-4 text-cyan-300" />{PROFILE.email}</a><a href={PROFILE.github} className="flex items-center gap-2"><Github className="h-4 w-4 text-cyan-300" />github.com/namdayneee</a><p className="flex items-center gap-2"><MapPin className="h-4 w-4 text-cyan-300" />{PROFILE.location}</p></div>
               </div>
 
-              {/* Grid sections */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {/* Left Profile/Skills Panel (1 col) */}
-                <div className="space-y-6 md:border-r md:border-outline-variant/10 md:pr-6">
-                  {/* Education */}
-                  <div>
-                    <h3 className="font-headline-lg text-xs text-[#00dce6] border-b border-outline-variant/10 pb-2 mb-4 tracking-widest uppercase font-bold">Education</h3>
-                    <div className="space-y-4">
-                      <div>
-                        <div className="font-bold text-white text-base">B.S. in Computer Science</div>
-                        <div className="text-sm font-semibold text-on-surface-variant mt-0.5">Ho Chi Minh University of Technology</div>
-                        <div className="text-xs text-neutral-500 font-mono mt-1">2020 — 2024</div>
-                        <div className="text-xs text-[#00dce6] font-mono mt-2 bg-[#00dce6]/5 border border-[#00dce6]/10 px-2 py-1 inline-block rounded">GPA: 3.6 / 4.0</div>
-                      </div>
-                    </div>
-                  </div>
+              <div className="mt-8 grid gap-9 md:grid-cols-[.72fr_1.28fr]">
+                <aside className="print-border space-y-8 md:border-r md:border-white/10 md:pr-8">
+                  <ResumeSection title="Education">
+                    <h3 className="print-dark font-bold text-white">B.S. Computer Science</h3><p className="print-muted mt-1 text-sm text-zinc-400">Ho Chi Minh City University of Technology (HCMUT)</p><p className="print-muted mt-2 font-mono text-xs text-zinc-500">2022 — Expected Apr 2027</p><p className="print-accent mt-2 font-mono text-xs font-bold text-cyan-300">GPA: {PROFILE.gpa}</p>
+                  </ResumeSection>
+                  <ResumeSection title="Technical skills">
+                    <div className="space-y-4">{SKILL_CATEGORIES.map((category) => <div key={category.title}><h3 className="print-accent font-mono text-[10px] font-bold uppercase text-violet-300">{category.title}</h3><p className="print-muted mt-1 text-xs leading-5 text-zinc-400">{category.skills.join(" · ")}</p></div>)}</div>
+                  </ResumeSection>
+                  <ResumeSection title="Languages">
+                    <p className="print-muted text-xs leading-6 text-zinc-400">Vietnamese — Native<br />English — Working proficiency</p>
+                  </ResumeSection>
+                </aside>
 
-                  {/* Skills lists */}
-                  <div>
-                    <h3 className="font-headline-lg text-xs text-[#00dce6] border-b border-outline-variant/10 pb-2 mb-4 tracking-widest uppercase font-bold">Skills</h3>
-                    <div className="space-y-4">
-                      <div>
-                        <div className="text-xs text-[#d8b9ff] font-mono uppercase font-bold mb-1.5">Languages</div>
-                        <p className="text-sm text-on-surface-variant">JavaScript, TypeScript, Go (Golang), HTML, CSS, SQL</p>
-                      </div>
-                      <div>
-                        <div className="text-xs text-[#d8b9ff] font-mono uppercase font-bold mb-1.5">Frontend</div>
-                        <p className="text-sm text-on-surface-variant">React.js, React Native, Redux Toolkit, Tailwind CSS, Motion Animations</p>
-                      </div>
-                      <div>
-                        <div className="text-xs text-[#d8b9ff] font-mono uppercase font-bold mb-1.5">Backend & DB</div>
-                        <p className="text-sm text-on-surface-variant">Node.js, Express, REST APIs, PostgreSQL, Prisma, MongoDB, Redis</p>
-                      </div>
-                      <div>
-                        <div className="text-xs text-[#d8b9ff] font-mono uppercase font-bold mb-1.5">Tools & AI</div>
-                        <p className="text-sm text-on-surface-variant">Cursor AI, Gemini SDK, Clerk Auth, Git, Docker, Agile (Scrum)</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Honors / Achievements */}
-                  <div>
-                    <h3 className="font-headline-lg text-xs text-[#00dce6] border-b border-outline-variant/10 pb-2 mb-4 tracking-widest uppercase font-bold">Achievements</h3>
-                    <ul className="space-y-3 text-xs text-on-surface-variant">
-                      <li className="flex gap-2">
-                        <Award className="w-4 h-4 text-[#00dce6] shrink-0" />
-                        <span>Certified Scrum Professional (CSP)</span>
-                      </li>
-                      <li className="flex gap-2">
-                        <Award className="w-4 h-4 text-[#00dce6] shrink-0" />
-                        <span>Google Gemini Certified Student Scholar</span>
-                      </li>
-                      <li className="flex gap-2">
-                        <Award className="w-4 h-4 text-[#00dce6] shrink-0" />
-                        <span>Outstanding Student Academic Scholarship, HCMUT</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-
-                {/* Right Work Experience & Projects (2 col) */}
-                <div className="md:col-span-2 space-y-6">
-                  {/* Experience */}
-                  <div>
-                    <h3 className="font-headline-lg text-xs text-[#00dce6] border-b border-outline-variant/10 pb-2 mb-4 tracking-widest uppercase font-bold">Work Experience</h3>
-                    <div className="space-y-6">
-                      <div>
-                        <div className="flex flex-col md:flex-row md:items-center justify-between mb-1">
-                          <h4 className="text-base font-bold text-white">Full-Stack Intern</h4>
-                          <span className="text-xs text-neutral-500 font-mono">June 2023 — Present</span>
-                        </div>
-                        <div className="text-sm font-semibold text-[#00dce6]/90 mb-2">EyeCode Technology Solutions</div>
-                        <p className="text-xs text-on-surface-variant mb-3 leading-relaxed">
-                          Working within the core engineering workspace, developing highly polished user-facing services and integrating AI architectures.
-                        </p>
-                        <ul className="list-disc pl-4 space-y-1.5 text-xs text-on-surface-variant">
-                          <li>Redesigned admin portals with virtualized rendering, improving load performance by over 40%.</li>
-                          <li>Constructed end-to-end unit testing frameworks with Jest, elevating test coverage boundaries up to 85% successfully.</li>
-                          <li>Leveraged Express APIs alongside JWT authentication logic to safely coordinate multi-tenant dashboard profiles.</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Projects */}
-                  <div>
-                    <h3 className="font-headline-lg text-xs text-[#00dce6] border-b border-outline-variant/10 pb-2 mb-4 tracking-widest uppercase font-bold">Selected Projects</h3>
-                    <div className="space-y-4">
-                      <div>
-                        <div className="flex justify-between items-center mb-1">
-                          <h4 className="text-sm font-bold text-white">HCMUT-LostFound</h4>
-                          <span className="text-[10px] font-mono text-[#00dce6] px-1.5 py-0.5 bg-[#00dce6]/5 border border-[#00dce6]/10 rounded">React Native | Node.js</span>
-                        </div>
-                        <p className="text-xs text-on-surface-variant leading-relaxed mb-1.5">
-                          Cross-platform campus-focused companion application resolving lost asset discoveries. Integrates real-time map beacons and instant messaging channels.
-                        </p>
-                      </div>
-
-                      <div>
-                        <div className="flex justify-between items-center mb-1">
-                          <h4 className="text-sm font-bold text-white">E-commerce Platform</h4>
-                          <span className="text-[10px] font-mono text-[#d8b9ff] px-1.5 py-0.5 bg-[#d8b9ff]/5 border border-[#d8b9ff]/10 rounded">React | MERN | Stripe</span>
-                        </div>
-                        <p className="text-xs text-on-surface-variant leading-relaxed">
-                          Full-scale web retail engine boasting extensive query indexing filters, visual performance dashboards, and automated transactions via secure Stripe hook checkouts.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                <div className="space-y-8">
+                  <ResumeSection title="Experience">
+                    <div className="space-y-7">{EXPERIENCE_ITEMS.slice(0, 1).map((item) => <div key={item.id}><div className="flex flex-col justify-between gap-1 sm:flex-row"><div><h3 className="print-dark font-bold text-white">{item.role}</h3><p className="print-accent mt-1 text-xs font-semibold text-cyan-300">{item.company}</p></div><p className="print-muted font-mono text-[10px] text-zinc-500">{item.duration}</p></div><p className="print-muted mt-3 text-xs leading-5 text-zinc-400">{item.description}</p><ul className="print-muted mt-3 list-disc space-y-1.5 pl-4 text-xs leading-5 text-zinc-400">{item.highlights.map((highlight) => <li key={highlight}>{highlight}</li>)}</ul></div>)}</div>
+                  </ResumeSection>
+                  <ResumeSection title="Selected projects">
+                    <div className="space-y-6">{PROJECTS.map((project) => <div key={project.id}><div className="flex flex-col justify-between gap-1 sm:flex-row"><h3 className="print-dark font-bold text-white">{project.title}</h3><p className="print-muted font-mono text-[10px] text-zinc-500">{project.tags.slice(0, 4).join(" · ")}</p></div><p className="print-muted mt-2 text-xs leading-5 text-zinc-400">{project.description}</p><p className="print-muted mt-2 text-xs leading-5 text-zinc-400">• {project.highlights[0]}</p></div>)}</div>
+                  </ResumeSection>
                 </div>
               </div>
             </div>
-
-            {/* Footer button */}
-            <div className="p-4 border-t border-outline-variant/10 bg-neutral-900/60 flex justify-end">
-              <button
-                onClick={onClose}
-                className="font-mono text-xs px-6 py-2 border border-outline-variant/30 hover:border-[#00dce6] hover:bg-neutral-800 transition-colors text-white"
-              >
-                Close Resume
-              </button>
-            </div>
-          </motion.div>
+          </motion.article>
         </div>
       )}
     </AnimatePresence>
   );
+}
+
+function ResumeSection({ title, children }: { title: string; children: ReactNode }) {
+  return <section><h2 className="print-border print-accent mb-4 border-b border-white/10 pb-2 font-mono text-xs font-bold uppercase tracking-[.15em] text-cyan-300">{title}</h2>{children}</section>;
 }
