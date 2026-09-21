@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
+import { Mascot } from "page-mascot";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -27,6 +28,8 @@ const navigation = [
   { id: "experience", label: "Experience" },
   { id: "skills", label: "Skills" },
 ];
+
+const mascotAssetPath = `${import.meta.env.BASE_URL}mascots/`;
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -123,6 +126,22 @@ export default function App() {
           </div>
 
           <motion.aside initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: .22 }} className="rounded-3xl border border-white/10 bg-white/[.035] p-6 shadow-2xl shadow-black/30 backdrop-blur">
+            <div className="relative mb-7 flex h-48 items-end justify-center overflow-hidden rounded-2xl border border-cyan-300/15 bg-gradient-to-b from-cyan-300/[.08] via-violet-300/[.035] to-transparent">
+              <div className="pointer-events-none absolute inset-x-10 bottom-2 h-20 rounded-full bg-cyan-300/10 blur-3xl" />
+              <span className="absolute left-3 top-3 rounded-full border border-white/10 bg-black/30 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[.16em] text-zinc-400 backdrop-blur">
+                Interactive profile
+              </span>
+              <span className="absolute right-3 top-3 font-mono text-[9px] text-cyan-200/70">
+                follow · click
+              </span>
+              <Mascot
+                directions={`${mascotAssetPath}nam-directions.webp`}
+                reactions={`${mascotAssetPath}nam-reactions.webp`}
+                size={188}
+                label="Nguyen Dinh Nam mascot"
+                className="relative z-10 -mb-1 drop-shadow-[0_18px_28px_rgba(34,211,238,0.16)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+              />
+            </div>
             <p className="font-mono text-[10px] uppercase tracking-[.22em] text-cyan-300">Candidate snapshot</p>
             <div className="mt-6 space-y-5">
               <Snapshot icon={<GraduationCap />} label="Education" value="B.S. Computer Science · HCMUT" note={`${PROFILE.graduation} · GPA ${PROFILE.gpa}`} />
