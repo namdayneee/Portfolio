@@ -1,19 +1,14 @@
-export interface Message {
-  role: "user" | "model";
-  content: string;
-  timestamp: Date;
-}
-
 export interface Project {
   id: string;
   title: string;
+  eyebrow: string;
   description: string;
-  longDescription?: string;
+  longDescription: string;
   tags: string[];
-  techTags: string[];
-  image?: string;
+  highlights: string[];
   github?: string;
-  metrics?: { label: string; value: string }[];
+  live?: string;
+  status: string;
 }
 
 export interface SkillCategory {
@@ -27,5 +22,5 @@ export interface ExperienceItem {
   company: string;
   duration: string;
   description: string;
-  highlights?: string[];
+  highlights: string[];
 }

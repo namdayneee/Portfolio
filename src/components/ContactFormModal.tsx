@@ -1,62 +1,22 @@
-import { motion, AnimatePresence } from "motion/react";
-import { X, Mail, Github } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import { Github, Mail, MapPin, X } from "lucide-react";
+import { PROFILE } from "../data";
 
-interface ContactFormModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const EMAIL = "dinhnam.tech@gmail.com";
-
-export default function ContactFormModal({ isOpen, onClose }: ContactFormModalProps) {
+export default function ContactFormModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="absolute inset-0 bg-neutral-950/85 backdrop-blur-md"
-          />
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-md bg-[#131115] border border-outline-variant/30 rounded-2xl shadow-2xl overflow-hidden"
-          >
-            <div className="flex justify-between items-center p-6 border-b border-outline-variant/10">
-              <h3 className="text-xl font-bold text-white">Liên hệ</h3>
-              <button
-                onClick={onClose}
-                className="p-1.5 border border-outline-variant/20 hover:bg-neutral-800 rounded-lg text-[#b9cacb] hover:text-white"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <div className="p-6 space-y-4">
-              <p className="text-sm text-[#b9cacb] leading-relaxed">
-                Gửi email trực tiếp hoặc xem mã nguồn trên GitHub.
-              </p>
-              <a
-                href={`mailto:${EMAIL}?subject=Portfolio%20-%20Liên%20hệ`}
-                className="flex items-center gap-3 p-4 bg-neutral-900 border border-outline-variant/20 rounded-xl hover:border-[#00dce6] transition-colors"
-              >
-                <Mail className="w-5 h-5 text-[#00dce6]" />
-                <span className="text-sm text-white font-mono">{EMAIL}</span>
-              </a>
-              <a
-                href="https://github.com/namnd-hcmut"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 p-4 bg-neutral-900 border border-outline-variant/20 rounded-xl hover:border-[#00dce6] transition-colors"
-              >
-                <Github className="w-5 h-5 text-[#00dce6]" />
-                <span className="text-sm text-white font-mono">github.com/namnd-hcmut</span>
-              </a>
+        <div className="fixed inset-0 z-[80] flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="contact-title">
+          <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-black/80 backdrop-blur-md" aria-label="Close contact dialog" />
+          <motion.div initial={{ opacity: 0, y: 18, scale: .98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 18, scale: .98 }} className="relative w-full max-w-md rounded-2xl border border-white/15 bg-[#111114] p-7 shadow-2xl">
+            <button onClick={onClose} className="absolute right-5 top-5 rounded-lg border border-white/10 p-2 text-zinc-400 hover:text-white" aria-label="Close"><X className="h-5 w-5" /></button>
+            <p className="font-mono text-[10px] uppercase tracking-[.18em] text-cyan-300">Let's connect</p>
+            <h2 id="contact-title" className="mt-3 pr-12 text-2xl font-bold text-white">Start a conversation</h2>
+            <p className="mt-4 text-sm leading-7 text-zinc-400">The fastest way to reach me is by email. You can also review my public work and contribution history on GitHub.</p>
+            <div className="mt-7 space-y-3">
+              <a href={`mailto:${PROFILE.email}?subject=Portfolio%20inquiry`} className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[.03] p-4 transition hover:border-cyan-300/40"><Mail className="h-5 w-5 text-cyan-300" /><span><span className="block font-mono text-[10px] uppercase text-zinc-500">Email</span><span className="mt-1 block text-sm text-white">{PROFILE.email}</span></span></a>
+              <a href={PROFILE.github} target="_blank" rel="noreferrer" className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[.03] p-4 transition hover:border-cyan-300/40"><Github className="h-5 w-5 text-cyan-300" /><span><span className="block font-mono text-[10px] uppercase text-zinc-500">GitHub</span><span className="mt-1 block text-sm text-white">github.com/namdayneee</span></span></a>
+              <div className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[.03] p-4"><MapPin className="h-5 w-5 text-cyan-300" /><span><span className="block font-mono text-[10px] uppercase text-zinc-500">Location</span><span className="mt-1 block text-sm text-white">{PROFILE.location}</span></span></div>
             </div>
           </motion.div>
         </div>
