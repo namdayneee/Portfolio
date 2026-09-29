@@ -4,6 +4,6 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   // Project Pages: https://<user>.github.io/<repo>/
-  base: "/Portfolio/",
+  base: "/",
   plugins: [react(), tailwindcss()],
 });
