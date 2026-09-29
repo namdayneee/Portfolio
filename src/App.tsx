@@ -63,7 +63,7 @@ export default function App() {
       <div className="grid-bg pointer-events-none fixed inset-0 opacity-70" />
       <div className="pointer-events-none fixed left-1/2 top-[-16rem] h-[32rem] w-[48rem] -translate-x-1/2 rounded-full bg-cyan-300/[.07] blur-[120px]" />
 
-      <header className="sticky top-0 z-50 border-b border-white/[.07] bg-[#09090b]/85 backdrop-blur-xl">
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/[.07] bg-[#09090b]/85 backdrop-blur-xl">
         <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-5 sm:px-8">
           <button onClick={() => scrollTo("about")} className="text-xl font-black tracking-tight text-white" aria-label="Back to top">
             NAM<span className="text-cyan-300">.</span>
@@ -103,7 +103,7 @@ export default function App() {
         </AnimatePresence>
       </header>
 
-      <main className="relative z-10">
+      <main className="relative z-10 pt-[73px]">
         <section id="about" className="mx-auto grid min-h-[calc(100vh-72px)] max-w-7xl items-center gap-14 px-5 py-20 sm:px-8 lg:grid-cols-[1.4fr_.6fr]">
           <div>
             <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="mb-8 inline-flex items-center gap-2 rounded-full border border-emerald-300/20 bg-emerald-300/[.06] px-3 py-1.5 font-mono text-xs text-emerald-200">
@@ -113,7 +113,7 @@ export default function App() {
               I turn coursework into <span className="text-cyan-300">working software.</span>
             </motion.h1>
             <motion.p initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .16 }} className="mt-7 max-w-2xl text-base leading-8 text-zinc-400 sm:text-lg">
-              I'm {PROFILE.vietnameseName}, a Computer Science student at HCMUT building practical web, mobile, and developer tools. I care about clear system design, reliable APIs, and interfaces that help people finish real tasks.
+              I'm {PROFILE.vietnameseName}, a Computer Science student at HCMUT building practical web, mobile and developer tools. I care about clear system design, reliable APIs and interfaces that help people finish real tasks.
             </motion.p>
             <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .24 }} className="mt-9 flex flex-wrap gap-3">
               <button onClick={() => scrollTo("projects")} className="flex items-center gap-2 rounded-lg bg-cyan-200 px-6 py-3.5 font-mono text-xs font-bold text-cyan-950 transition hover:bg-cyan-300">
@@ -139,7 +139,7 @@ export default function App() {
                 reactions={`${mascotAssetPath}nam-reactions.webp`}
                 size={188}
                 label="Nguyen Dinh Nam mascot"
-                className="relative z-10 -mb-1 drop-shadow-[0_18px_28px_rgba(34,211,238,0.16)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+                className="profile-mascot relative z-10 -mb-1 drop-shadow-[0_18px_28px_rgba(34,211,238,0.16)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
               />
             </div>
             <p className="font-mono text-[10px] uppercase tracking-[.22em] text-cyan-300">Candidate snapshot</p>
